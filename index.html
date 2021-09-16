@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Todo app</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+  <div class="todo-app">
+    <div class="header">
+      <h1 class="header__text">Todo</h1>
+      <div class="header__toggler">
+      </div>
+    </div>
+    <div class="new-todo">
+      <div class="checkbox"></div>
+      <input class="new-todo__input" type="text" name="newTodo" id="newTodo" autocomplete="off" placeholder="Create a new todo...">
+    </div>
+    <div class="todo-list"></div>
+    <div class="controllers">
+      <div class="controllers__items-left">
+        <span class="controllers__items-left__number">0</span> items left
+      </div>
+      <div class="controllers__filter">
+        <button id="all" class="controllers__filter__button is-active">All</button>
+        <button id="active" class="controllers__filter__button">Active</button> 
+        <button id="completed" class="controllers__filter__button">Completed</button>
+      </div>
+      <div class="controllers__clear-completed">
+        <button class="controllers__clear-completed__button">Clear Completed</button>
+      </div>
+    </div>
+    <div class="controllers__filter-mobile">
+      <button id="all" class="controllers__filter__button is-active">All</button>
+      <button id="active" class="controllers__filter__button">Active</button> 
+      <button id="completed" class="controllers__filter__button">Completed</button>
+    </div>
+  </div>
+  <div class="attribution">
+      Challenge by <a class="attribution__link" href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+      Coded by <a class="attribution__link" href="https://github.com/grazziotti" target="_blank">Grazziotti</a>.
+    </div>
+  <script src="./assets/js/script.js"></script>
+</body>
+</html>
