@@ -47,7 +47,6 @@ function newTodo() {
 }
 function updateTodosLeft() {
     const todosLeftContainer = document.querySelector('.controllers__items-left__number')
-    // const todos = document.querySelectorAll('.todo-list__todo')
     let todosLeft = 0
 
     todos.forEach( todo => {
@@ -74,7 +73,7 @@ function filter(evt) {
     const filterButton = evt.target
     filterButton.classList.add('is-active')
     
-    const filter = evt.target.id
+    const filter = evt.target.getAttribute('data-option')
 
     switch(filter) {
         case 'all':

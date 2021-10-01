@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark-mode">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-<body>
+<body class="dark-mode">
   <div class="todo-app">
     <div class="header">
       <h1 class="header__text">Todo</h1>
@@ -29,18 +29,18 @@
         <span class="controllers__items-left__number">0</span> items left
       </div>
       <div class="controllers__filter">
-        <button id="all" class="controllers__filter__button is-active">All</button>
-        <button id="active" class="controllers__filter__button">Active</button> 
-        <button id="completed" class="controllers__filter__button">Completed</button>
+        <button data-option="all" class="controllers__filter__button is-active">All</button>
+        <button data-option="active" class="controllers__filter__button">Active</button> 
+        <button data-option="completed" class="controllers__filter__button">Completed</button>
       </div>
       <div class="controllers__clear-completed">
         <button class="controllers__clear-completed__button">Clear Completed</button>
       </div>
     </div>
     <div class="controllers__filter-mobile">
-      <button id="all" class="controllers__filter__button is-active">All</button>
-      <button id="active" class="controllers__filter__button">Active</button> 
-      <button id="completed" class="controllers__filter__button">Completed</button>
+      <button data-option="all" class="controllers__filter__button is-active">All</button>
+      <button data-option="active" class="controllers__filter__button">Active</button> 
+      <button data-option="completed" class="controllers__filter__button">Completed</button>
     </div>
   </div>
   <div class="attribution">
