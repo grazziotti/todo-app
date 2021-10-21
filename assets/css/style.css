@@ -253,6 +253,19 @@ body {
     background-color: transparent;
 }
 
+[data-anime] {
+    opacity: 0;
+    transition: .5s;
+}
+
+[data-anime="top"] {
+    transform: translateY(-3rem);
+}
+
+[data-anime].animate {
+    opacity: 1;
+    transform: translate(0, 0);
+}
 
 
 /* attribution */

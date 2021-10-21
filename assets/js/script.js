@@ -5,7 +5,11 @@ const todosContainer = document.querySelector('.todo-list')
 const todos = todosContainer.childNodes
 const clearButton = document.querySelector('.controllers__clear-completed__button')
 const filterButtons =  document.querySelectorAll('.controllers__filter__button')
+const elementsWithAnimate = document.querySelectorAll('[data-anime]')
 
+setTimeout( () => {
+    elementsWithAnimate.forEach( el => el.classList.add('animate'), 1)
+})
 
 // Toggle light and dark mode
 const toggleTheme = () => html.classList.toggle('dark-mode')
