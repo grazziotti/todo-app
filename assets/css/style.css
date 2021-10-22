@@ -12,6 +12,7 @@
     --body--background-image: url('../images/bg-desktop-light.jpg');
     --body--background-image-mobile: url('../images/bg-mobile-light.jpg');
     --toggler-icon: url('../images/icon-moon.svg');
+    --component-shadow: 0 35px 50px -15px rgba(194, 195, 214, 0.5);
 }
 
 .dark-mode:root {
@@ -26,6 +27,7 @@
     --body--background-image: url('../images/bg-desktop-dark.jpg');
     --body--background-image-mobile: url('../images/bg-mobile-dark.jpg');
     --toggler-icon: url('../images/icon-sun.svg');
+    --component-shadow: 0 35px 50px -15px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -86,7 +88,7 @@ body {
     padding: 2.05rem 2.4rem;
     margin-top: 4rem;
     border-radius: 5px;
-    box-shadow: 0 35px 50px -15px rgba(0,0,0,0.5);
+    box-shadow: var(--component-shadow);
     background-color: var(--todo-background-color);
 }
 
@@ -129,7 +131,7 @@ body {
 .todo-list {
     margin-top: 3rem;
     border-radius: 5px 5px 0 0;
-    box-shadow: 0 35px 50px -15px rgba(0,0,0,0.5);
+    box-shadow: var(--component-shadow);
     background-color: var(--todo-background-color);
 }
 
@@ -200,7 +202,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 1.6rem 2.4rem;
-    box-shadow: 0 35px 50px -15px rgba(0,0,0,0.5);
+    box-shadow: var(--component-shadow);
     border-radius: 0 0 5px 5px;
     font-size: 1.4rem;
     color: var(--light-text);
@@ -215,7 +217,7 @@ body {
 
 .controllers__filter-mobile {
     display: none;
-    box-shadow: 0 35px 50px -15px rgba(0,0,0,0.5);
+    box-shadow: var(--component-shadow);
 }
 
 .controllers__items-left {
