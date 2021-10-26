@@ -20,6 +20,7 @@ function newTodo() {
     const todo = document.createElement('div')
     const todoText = input.value
 
+    todo.setAttribute('draggable', 'true')
     todo.classList.add('todo-list__todo')
 
     const todoContent = `
@@ -32,6 +33,11 @@ function newTodo() {
 
     todo.innerHTML = todoContent
 
+    addTodoEventListeners(todo)
+    
+    todosContainer.appendChild(todo)
+}
+function addTodoEventListeners(todo) {
     // Mark todos as complete
     const todoCheckbox = todo.querySelector('.checkbox')
     todoCheckbox.addEventListener('click', () => {
@@ -47,7 +53,36 @@ function newTodo() {
         todosContainer.removeChild(todo)
     })
 
-    todosContainer.appendChild(todo)
+    // Drag and drop to reorder items on the list
+    todo.addEventListener('dragstart', () => {
+        todo.classList.add('dragging')
+    })
+    todo.addEventListener('dragend', () => {
+        todo.classList.remove('dragging')
+    })
+    todo.addEventListener('dragover', e => {
+        e.preventDefault()
+        const afterElement = getDragAfterElement(e.clientY)
+        const draggable = document.querySelector('.dragging')
+        if (afterElement == null) {
+            todosContainer.appendChild(draggable)
+        } else {
+            todosContainer.insertBefore(draggable, afterElement)
+        }
+    })
+}
+function getDragAfterElement(y) {
+    const draggablesTodos = [...todosContainer.querySelectorAll('.todo-list__todo:not(.dragging)')]
+    return draggablesTodos.reduce((closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+        if (offset < 0 && offset > closest.offset) {
+            return {offset: offset, element: child}
+        } else {
+            return closest
+        }
+    }, {offset: Number.NEGATIVE_INFINITY}).element
+
 }
 function updateTodosLeft() {
     const todosLeftContainer = document.querySelector('.controllers__items-left__number')
