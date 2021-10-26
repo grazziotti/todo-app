@@ -317,7 +317,7 @@ body {
     }
 
     .new-todo__input {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         margin-left: 1.2rem;
     }
 
@@ -333,7 +333,7 @@ body {
     }
 
     .todo-list__todo__text {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         margin-left: 1.2rem;
     }
 
@@ -348,19 +348,23 @@ body {
 
     /* controllers */
     .controllers {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
 
     .controllers__items-left {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
 
     .controllers__clear-completed__button {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
 
     .controllers__filter {
         display: none;
+    }
+
+    .controllers__filter__button {
+        font-size: 1.5rem;
     }
 
     .controllers__filter-mobile {
