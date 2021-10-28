@@ -160,7 +160,7 @@ body {
     align-items: center;
 }
 
-.is-completed .todo-list__todo__text {
+.completed .todo-list__todo__text {
     text-decoration: line-through;
     color: var(--light-text);
 }
@@ -169,11 +169,11 @@ body {
     background: linear-gradient(145deg,hsl(192, 100%, 67%),hsl(280, 87%, 65%));
 }
 
-.is-completed .checkbox {
+.completed .checkbox {
     background: linear-gradient(145deg,hsl(192, 100%, 67%),hsl(280, 87%, 65%)) !important;
 }
 
-.is-completed .checkbox::before {
+.completed .checkbox::before {
     background: url('../images/icon-check.svg'), linear-gradient(145deg,hsl(192, 100%, 67%),hsl(280, 87%, 65%));
     background-repeat: no-repeat;
     background-position: center;
@@ -246,7 +246,7 @@ body {
     margin: 0 1.6rem;
 }
 
-.is-active {
+.controllers__filter .active {
     color: hsl(220, 98%, 61%) !important;
 }
 
