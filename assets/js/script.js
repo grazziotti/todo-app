@@ -62,8 +62,6 @@ function reorderTodos() {
         todo.setAttribute('data-index', index)
         saveTodo(todo)
     })
-
-    console.log(tasks)
 }
 
 function renderTodos() {
@@ -102,11 +100,11 @@ function addTodoEventListeners(todo) {
         todo.classList.toggle('completed')
         updateTodosLeft()
 
+        reorderTodos()
+
         const todoIndex = todo.getAttribute('data-index')
         
-        tasks[todoIndex].status === 'active'
-            ? tasks[todoIndex].status = 'completed'
-            : tasks[todoIndex].status = 'active'
+        tasks[todoIndex].status === todo.classList[1]
         localStorage.setItem('tasks', JSON.stringify(tasks))
         
         const filterActive = document.querySelector('.controllers__filter__button.active')
@@ -132,6 +130,7 @@ function addTodoEventListeners(todo) {
     })
     todo.addEventListener('dragend', () => {
         todo.classList.remove('dragging')
+        reorderTodos()
     })
     todo.addEventListener('dragover', e => {
         e.preventDefault()
@@ -142,9 +141,6 @@ function addTodoEventListeners(todo) {
         } else {
             todosContainer.insertBefore(draggable, afterElement)
         }
-    })
-    todo.addEventListener('drop', () => {
-        reorderTodos()
     })
 }
 
@@ -223,15 +219,16 @@ filterButtons.forEach( filterButton => {
 // Clear all completed todos
 function clearCompleted() {
     const todosCompleted = todosContainer.querySelectorAll('.completed')
+
     todosCompleted.forEach( todo => {
         todosContainer.removeChild(todo)
     })
 
-    tasks.forEach( (task, index) => {
-        if (task.status === 'completed') tasks.splice(index, 1)
-    })
+    reorderTodos()
 
-    localStorage.setItem('tasks', JSON.stringify(tasks))
+    const todosActive = tasks.filter( task => task.status !== 'completed')
+
+    localStorage.setItem('tasks', JSON.stringify(todosActive))
     
 }
 clearButton.addEventListener('click', clearCompleted)
