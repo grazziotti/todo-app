@@ -1,5 +1,4 @@
-const html = document.querySelector('html')
-const toggleButton = document.querySelector('.header__toggler')
+const toggleThemeButton = document.querySelector('.header__toggler')
 const input = document.querySelector('.new-todo__input')
 const todosContainer = document.querySelector('.todo-list')
 const todos = todosContainer.childNodes
@@ -7,32 +6,50 @@ const clearButton = document.querySelector('.controllers__clear-completed__butto
 const filterButtons =  document.querySelectorAll('.controllers__filter__button')
 const localStorageTasks = JSON.parse(localStorage.getItem('tasks'))
 const tasks = localStorage.getItem('tasks') !== null ? localStorageTasks : [] 
-const elementsWithAnimate = document.querySelectorAll('[data-anime]')
-
-setTimeout( () => {
-    elementsWithAnimate.forEach( el => el.classList.add('animate'), 1)
-})
+const elementsWithAnimation = document.querySelectorAll('[data-anime]')
 
 // Toggle light and dark mode
 function toggleTheme() {
-    html.classList.toggle('dark-mode')  
+    document.querySelector('html').classList.toggle('dark-mode')  
 }
-toggleButton.addEventListener('click', toggleTheme)
+toggleThemeButton.addEventListener('click', toggleTheme)
+
+function checkInput(e) {
+    if (isTheEnterKey(e) && !isInputEmpty()) {
+        const task = input.value
+        newTodo(task)
+        saveTodo(todos[todos.length-1])
+        updateTodosLeft()
+        clearInputText()
+    }
+}
+input.addEventListener('keydown', checkInput)
+
+function isTheEnterKey(e) {
+    return e.keyCode === 13
+}
+
+function isInputEmpty() {
+    return input.value === ''
+}
+
+function clearInputText() {
+    input.value = ''
+}
 
 // Add new todos to the list
-function newTodo() {
+function newTodo(task, status='active') {
     const todo = document.createElement('div')
-    const todoText = input.value
 
     todo.classList.add('todo-list__todo')
-    todo.classList.add('active')
+    todo.classList.add(status)
     todo.setAttribute('draggable', 'true')
     todo.setAttribute('data-index', todos.length)
 
     const todoContent = `
         <div class="todo-list__todo__content">
             <div class="checkbox"></div>
-            <div class="todo-list__todo__text">${todoText}</div>
+            <div class="todo-list__todo__text">${task}</div>
         </div>
         <div class="todo-list__todo__delete"></div>  
     `
@@ -40,10 +57,21 @@ function newTodo() {
     todo.innerHTML = todoContent
 
     addTodoEventListeners(todo)
-    
+
     todosContainer.appendChild(todo)
+}
+
+function addTodoEventListeners(todo) {
+    // Mark todos as complete
+    todo.querySelector('.checkbox').addEventListener('click', () => markTodoAsCompleted(todo))
     
-    saveTodo(todo)
+    // Delete todos from the list
+    todo.querySelector('.todo-list__todo__delete').addEventListener('click', () => deleteTodo(todo))
+
+    // Drag and drop to reorder items on the list
+    todo.addEventListener('dragstart', dragStart)
+    todo.addEventListener('dragend', dragEnd)
+    todo.addEventListener('dragover', dragOver)
 }
 
 function saveTodo(todo) {
@@ -51,115 +79,46 @@ function saveTodo(todo) {
     const status = todo.classList.contains('active') 
         ? 'active'
         : 'completed'
-    tasks.push({status, task})
-    localStorage.setItem('tasks', JSON.stringify(tasks))
+    tasks.push({task, status})
+    localStorage.setItem('tasks',JSON.stringify(tasks))
 }
 
-function reorderTodos() {
-    tasks.splice(0, tasks.length)
+function deleteTodo(todo) {
+    const todoIndex = todo.getAttribute('data-index')
+        
+    todosContainer.removeChild(todo)
+    
+    tasks.splice(todoIndex, 1)
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+    
+    reorderTodos()
+    updateTodosLeft()
+}
 
-    todos.forEach( (todo, index) => {
-        todo.setAttribute('data-index', index)
-        saveTodo(todo)
-    })
+function markTodoAsCompleted(todo) {
+    const todoIndex = todo.getAttribute('data-index')
+
+    todo.classList.toggle('active')
+    todo.classList.toggle('completed')
+
+    tasks[todoIndex].status = todo.classList[1]
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+    
+    const filterActive = document.querySelector('.controllers__filter__button.active')
+    filterActive.click()
+
+    updateTodosLeft()
 }
 
 function renderTodos() {
     tasks.forEach( task => {
-        const todo = document.createElement('div')
-        const todoText = task.task
-
-        todo.classList.add('todo-list__todo')
-        todo.classList.add(task.status)
-        todo.setAttribute('draggable', 'true')
-        todo.setAttribute('data-index', todos.length)
-
-        const todoContent = `
-            <div class="todo-list__todo__content">
-                <div class="checkbox"></div>
-                <div class="todo-list__todo__text">${todoText}</div>
-            </div>
-            <div class="todo-list__todo__delete"></div>  
-        `
-
-        todo.innerHTML = todoContent
-
-        addTodoEventListeners(todo)
-
-        todosContainer.appendChild(todo)
-    
-        updateTodosLeft()
+        newTodo(task.task, task.status)
     })
-}
-
-function addTodoEventListeners(todo) {
-    // Mark todos as complete
-    const todoCheckbox = todo.querySelector('.checkbox')
-    todoCheckbox.addEventListener('click', () => {
-        todo.classList.toggle('active')
-        todo.classList.toggle('completed')
-        updateTodosLeft()
-
-        reorderTodos()
-
-        const todoIndex = todo.getAttribute('data-index')
-        
-        tasks[todoIndex].status === todo.classList[1]
-        localStorage.setItem('tasks', JSON.stringify(tasks))
-        
-        const filterActive = document.querySelector('.controllers__filter__button.active')
-        filterActive.click()
-    })
-
-    // Delete todos from the list
-    const todoDeleteBtn = todo.querySelector('.todo-list__todo__delete')
-    todoDeleteBtn.addEventListener('click', () => {
-        const todoIndex = todo.getAttribute('data-index')
-        
-        todosContainer.removeChild(todo)
-        tasks.splice(todoIndex, 1)
-        localStorage.setItem('tasks', JSON.stringify(tasks))
-        
-        reorderTodos()
-        updateTodosLeft()
-    })
-
-    // Drag and drop to reorder items on the list
-    todo.addEventListener('dragstart', () => {
-        todo.classList.add('dragging')
-    })
-    todo.addEventListener('dragend', () => {
-        todo.classList.remove('dragging')
-        reorderTodos()
-    })
-    todo.addEventListener('dragover', e => {
-        e.preventDefault()
-        const afterElement = getDragAfterElement(e.clientY)
-        const draggable = document.querySelector('.dragging')
-        if (afterElement == null) {
-            todosContainer.appendChild(draggable)
-        } else {
-            todosContainer.insertBefore(draggable, afterElement)
-        }
-    })
-}
-
-function getDragAfterElement(y) {
-    const draggablesTodos = [...todosContainer.querySelectorAll('.todo-list__todo:not(.dragging)')]
-    return draggablesTodos.reduce((closest, child) => {
-        const box = child.getBoundingClientRect()
-        const offset = y - box.top - box.height / 2
-        if (offset < 0 && offset > closest.offset) {
-            return {offset: offset, element: child}
-        } else {
-            return closest
-        }
-    }, {offset: Number.NEGATIVE_INFINITY}).element
-
 }
 
 function updateTodosLeft() {
     const todosLeftContainer = document.querySelector('.controllers__items-left__number')
+
     let todosLeft = 0
 
     todos.forEach( todo => {
@@ -169,29 +128,15 @@ function updateTodosLeft() {
     todosLeftContainer.innerHTML = todosLeft
 }
 
-function clearInputText() {
-    input.value = ''
-}
-
-function checkInput(evt) {
-    if (evt.keyCode === 13 && input.value !== '') {
-        newTodo()
-        updateTodosLeft()
-        clearInputText()
-    }
-}
-
-input.addEventListener('keydown', checkInput)
-
 // Filter by all/active/complete todos
-function filter(evt) {
-    filterButtons.forEach( btn => btn.classList.remove('active'))
-    const filterButton = evt.target
-    filterButton.classList.add('active')
-    
-    const filter = evt.target.getAttribute('data-option')
+function filter(e) {
+    const filterButtonClicked = e.target
+    const filterOption = e.target.getAttribute('data-option')
 
-    switch(filter) {
+    filterButtons.forEach( btn => btn.classList.remove('active'))
+    filterButtonClicked.classList.add('active')
+    
+    switch(filterOption) {
         case 'all':
             todos.forEach( todo => todo.classList.remove('is-hidden')) 
             break
@@ -200,7 +145,6 @@ function filter(evt) {
                 todo.classList.contains('completed')
                     ?   todo.classList.remove('is-hidden')
                     :   todo.classList.add('is-hidden')
-                
             })
             break
         case 'active':
@@ -229,8 +173,61 @@ function clearCompleted() {
     const todosActive = tasks.filter( task => task.status !== 'completed')
 
     localStorage.setItem('tasks', JSON.stringify(todosActive))
-    
 }
 clearButton.addEventListener('click', clearCompleted)
 
-renderTodos()
+// drag and drop functions
+function dragStart(e) {
+    const todo = e.target
+    todo.classList.add('dragging')
+}
+
+function dragOver(e) {
+    e.preventDefault()
+    const afterElement = getDragAfterElement(e.clientY)
+    const draggable = document.querySelector('.dragging')
+    if (afterElement == null) {
+        todosContainer.appendChild(draggable)
+    } else {
+        todosContainer.insertBefore(draggable, afterElement)
+    }
+}
+
+function dragEnd(e) {
+    const todo = e.target
+    todo.classList.remove('dragging')
+    reorderTodos()
+}
+
+function getDragAfterElement(y) {
+    const draggablesTodos = [...todosContainer.querySelectorAll('.todo-list__todo:not(.dragging)')]
+    return draggablesTodos.reduce((closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+        if (offset < 0 && offset > closest.offset) {
+            return {offset: offset, element: child}
+        } else {
+            return closest
+        }
+    }, {offset: Number.NEGATIVE_INFINITY}).element
+
+}
+
+function reorderTodos() {
+    tasks.splice(0, tasks.length)
+
+    todos.forEach( (todo, index) => {
+        todo.setAttribute('data-index', index)
+        saveTodo(todo)
+    })
+}
+
+// init
+function init() {
+    renderTodos()
+    updateTodosLeft()
+    setTimeout( () => {
+        elementsWithAnimation.forEach( el => el.classList.add('animate'), 1)
+    })
+}
+init()
