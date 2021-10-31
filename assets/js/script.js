@@ -1,3 +1,4 @@
+const html = document.querySelector('html')
 const toggleThemeButton = document.querySelector('.header__toggler')
 const input = document.querySelector('.new-todo__input')
 const todosContainer = document.querySelector('.todo-list')
@@ -10,15 +11,18 @@ const elementsWithAnimation = document.querySelectorAll('[data-anime]')
 
 // Toggle light and dark mode
 function toggleTheme() {
-    document.querySelector('html').classList.toggle('dark-mode')  
+    const theme = html.classList.contains('light-mode') ? 'dark-mode' : 'light-mode'
+    html.classList = theme
+    localStorage.setItem('theme', theme)
 }
 toggleThemeButton.addEventListener('click', toggleTheme)
 
 function checkInput(e) {
     if (isTheEnterKey(e) && !isInputEmpty()) {
         const task = input.value
-        newTodo(task)
-        saveTodo(todos[todos.length-1])
+        const todo = createTodo(task)
+        renderTodo(todo)
+        saveTodo(todo)
         updateTodosLeft()
         clearInputText()
     }
@@ -38,11 +42,11 @@ function clearInputText() {
 }
 
 // Add new todos to the list
-function newTodo(task, status='active') {
+function createTodo(task, state='active') {
     const todo = document.createElement('div')
 
     todo.classList.add('todo-list__todo')
-    todo.classList.add(status)
+    todo.classList.add(state)
     todo.setAttribute('draggable', 'true')
     todo.setAttribute('data-index', todos.length)
 
@@ -58,7 +62,7 @@ function newTodo(task, status='active') {
 
     addTodoEventListeners(todo)
 
-    todosContainer.appendChild(todo)
+    return todo
 }
 
 function addTodoEventListeners(todo) {
@@ -76,10 +80,10 @@ function addTodoEventListeners(todo) {
 
 function saveTodo(todo) {
     const task = todo.querySelector('.todo-list__todo__text').textContent 
-    const status = todo.classList.contains('active') 
+    const state = todo.classList.contains('active') 
         ? 'active'
         : 'completed'
-    tasks.push({task, status})
+    tasks.push({task, state})
     localStorage.setItem('tasks',JSON.stringify(tasks))
 }
 
@@ -101,7 +105,7 @@ function markTodoAsCompleted(todo) {
     todo.classList.toggle('active')
     todo.classList.toggle('completed')
 
-    tasks[todoIndex].status = todo.classList[1]
+    tasks[todoIndex].state = todo.classList[1]
     localStorage.setItem('tasks', JSON.stringify(tasks))
     
     const filterActive = document.querySelector('.controllers__filter__button.active')
@@ -110,10 +114,8 @@ function markTodoAsCompleted(todo) {
     updateTodosLeft()
 }
 
-function renderTodos() {
-    tasks.forEach( task => {
-        newTodo(task.task, task.status)
-    })
+function renderTodo(todo) {
+    todosContainer.appendChild(todo)
 }
 
 function updateTodosLeft() {
@@ -170,7 +172,7 @@ function clearCompleted() {
 
     reorderTodos()
 
-    const todosActive = tasks.filter( task => task.status !== 'completed')
+    const todosActive = tasks.filter( task => task.state !== 'completed')
 
     localStorage.setItem('tasks', JSON.stringify(todosActive))
 }
@@ -224,10 +226,9 @@ function reorderTodos() {
 
 // init
 function init() {
-    renderTodos()
+    html.classList = localStorage.getItem('theme')
+    tasks.forEach( task => renderTodo(createTodo(task.task, task.state)))
     updateTodosLeft()
-    setTimeout( () => {
-        elementsWithAnimation.forEach( el => el.classList.add('animate'), 1)
-    })
+    setTimeout( () => elementsWithAnimation.forEach( el => el.classList.add('animate'), 1))
 }
 init()
