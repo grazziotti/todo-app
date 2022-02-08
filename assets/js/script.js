@@ -2,7 +2,7 @@ const html = document.querySelector('html')
 const toggleThemeButton = document.querySelector('.header__toggler')
 const input = document.querySelector('.new-todo__input')
 const todosContainer = document.querySelector('.todo-list')
-const todos = todosContainer.childNodes
+const todos = todosContainer.childNodes 
 const clearButton = document.querySelector('.controllers__clear-completed__button')
 const filterButtons =  document.querySelectorAll('.controllers__filter__button')
 const localStorageTasks = JSON.parse(localStorage.getItem('tasks'))
@@ -23,6 +23,7 @@ function checkInput(e) {
         const todo = createTodo(task)
         renderTodo(todo)
         saveTodo(todo)
+        checkEmpty()
         updateTodosLeft()
         clearInputText()
     }
@@ -48,7 +49,7 @@ function createTodo(task, state='active') {
     todo.classList.add('todo-list__todo')
     todo.classList.add(state)
     todo.setAttribute('draggable', 'true')
-    todo.setAttribute('data-index', todos.length)
+    todo.setAttribute('data-index', tasks.length)
 
     const todoContent = `
         <div class="todo-list__todo__content">
@@ -87,6 +88,24 @@ function saveTodo(todo) {
     localStorage.setItem('tasks',JSON.stringify(tasks))
 }
 
+function checkEmpty() {
+    const todoAppContainer = document.querySelector('.todo-app')
+
+    if (tasks.length === 0) {
+        todoAppContainer.classList.add('empty')
+
+        const emptyMsg = document.createElement('p')
+        emptyMsg.classList.add('msg-empty')
+        emptyMsg.innerText = 'There is no tasks 👀'
+        todosContainer.appendChild(emptyMsg)
+    } else {
+        todoAppContainer.classList.remove('empty')
+        if (todosContainer.querySelector('.msg-empty')) {
+            todosContainer.removeChild(todosContainer.querySelector('.msg-empty'))
+        }
+    }
+}
+
 function deleteTodo(todo) {
     const todoIndex = todo.getAttribute('data-index')
         
@@ -97,6 +116,7 @@ function deleteTodo(todo) {
     
     reorderTodos()
     updateTodosLeft()
+    checkEmpty()
 }
 
 function markTodoAsCompleted(todo) {
@@ -104,6 +124,10 @@ function markTodoAsCompleted(todo) {
 
     todo.classList.toggle('active')
     todo.classList.toggle('completed')
+
+    console.log(tasks)
+    console.log(todoIndex)
+    console.log(todo.classList[1])
 
     tasks[todoIndex].state = todo.classList[1]
     localStorage.setItem('tasks', JSON.stringify(tasks))
@@ -124,7 +148,9 @@ function updateTodosLeft() {
     let todosLeft = 0
 
     todos.forEach( todo => {
-        if (!todo.classList.contains('completed')) todosLeft++
+        if (todo.classList.contains('todo-list__todo') && !todo.classList.contains('completed')) {
+            todosLeft++
+        }
     })
 
     todosLeftContainer.innerHTML = todosLeft
@@ -175,6 +201,8 @@ function clearCompleted() {
     const todosActive = tasks.filter( task => task.state !== 'completed')
 
     localStorage.setItem('tasks', JSON.stringify(todosActive))
+
+    checkEmpty()
 }
 clearButton.addEventListener('click', clearCompleted)
 
@@ -229,6 +257,8 @@ function init() {
     html.classList = localStorage.getItem('theme')
     tasks.forEach( task => renderTodo(createTodo(task.task, task.state)))
     updateTodosLeft()
+    reorderTodos()
+    checkEmpty()
     setTimeout( () => elementsWithAnimation.forEach( el => el.classList.add('animate'), 1))
 }
 init()

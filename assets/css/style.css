@@ -7,7 +7,7 @@
     --dark-text: hsl(235, 19%, 35%);
     --body-background-color: hsl(0, 0%, 98%);
     --todo-background-color: hsl(0, 0%, 100%);
-    --border-color: hsl(236, 33%, 92%);
+    --border-color: rgb(219, 220, 226);
     /* images */
     --body--background-image: url('../images/bg-desktop-light.jpg');
     --body--background-image-mobile: url('../images/bg-mobile-light.jpg');
@@ -17,12 +17,12 @@
 
 .dark-mode:root {
     /* colors */
-    --light-text: hsl(235, 16%, 43%);
+    --light-text: #777a92;
     --very-light-text: hsl(233, 14%, 35%);
     --dark-text: hsl(234, 39%, 85%);
     --body-background-color: hsl(235, 21%, 11%);
     --todo-background-color: hsl(235, 24%, 19%);
-    --border-color: hsl(237, 14%, 26%);
+    --border-color: hsl(233, 14%, 35%);
     /* images */
     --body--background-image: url('../images/bg-desktop-dark.jpg');
     --body--background-image-mobile: url('../images/bg-mobile-dark.jpg');
@@ -45,16 +45,24 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
     background-image: var(--body--background-image);
-    background-size: 100%;
+    background-size: 100% 30rem;
     background-repeat: no-repeat;
     background-color: var(--body-background-color);
     transition: background .3s;
 }
 
+.checkbox {
+    position: relative;
+    padding: 1px;
+    background: var(--border-color);
+    border-radius: 50%;
+}
+
 .todo-app {
     width: 54rem;
-    margin-top: 5.7rem;
+    margin-top: 8.8rem;
 }
 
 
@@ -92,21 +100,13 @@ body {
     background-color: var(--todo-background-color);
 }
 
-.checkbox {
-    position: relative;
-    padding: 1px;
-    background: var(--border-color);
-    border-radius: 50%;
-    cursor: pointer;
-}
-
 .checkbox::before {
     content: '';
     display: block;
     top: 50%;
     left: 50%;
-    width: 2rem;
-    height: 2rem;
+    width: 2.3rem;
+    height: 2.3rem;
     border-radius: 50%;
     background-color: var(--todo-background-color);
 }
@@ -114,6 +114,7 @@ body {
 .new-todo__input {
     width: 100%;
     margin-left: 2.4rem;
+    padding-top: 2px;
     outline: 0;
     border: none;
     font-size: 1.8rem;    
@@ -160,12 +161,11 @@ body {
     align-items: center;
 }
 
-.completed .todo-list__todo__text {
-    text-decoration: line-through;
-    color: var(--light-text);
+.todo-list .checkbox {
+    cursor: pointer;
 }
 
-.checkbox:hover {
+.todo-list .checkbox:hover {
     background: linear-gradient(145deg,hsl(192, 100%, 67%),hsl(280, 87%, 65%));
 }
 
@@ -181,11 +181,16 @@ body {
 
 .todo-list__todo__text {
     max-width: 40rem;
+    margin-top: 2px;
     margin-left: 2.4rem;
     font-size: 1.8rem;
     word-break: break-word;
     color: var(--dark-text);
-    cursor: pointer;
+}
+
+.completed .todo-list__todo__text {
+    text-decoration: line-through;
+    color: var(--light-text);
 }
 
 .todo-list__todo__delete {
@@ -193,6 +198,10 @@ body {
     height: 1.8rem;
     background-image: url('../images/icon-cross.svg');
     display: none;
+}
+
+.todo-app.empty .todo-list {
+    border-radius: 5px;
 }
 
 
@@ -220,15 +229,11 @@ body {
     box-shadow: var(--component-shadow);
 }
 
-.controllers__items-left {
-    font-size: 1.4rem;
-}
-
 .controllers__filter__button,
 .controllers__clear-completed__button {
+    font-size: 1.4rem;
     border: none;
     background-color: transparent;
-    font-size: 1.4rem;
     color: var(--light-text);
     cursor: pointer;
 }
@@ -242,17 +247,55 @@ body {
     font-weight: 700;
 }
 
-.controllers__filter__button:nth-child(2) {
+.controllers__filter__button.active {
+    color: hsl(220, 98%, 61%);
+}
+
+.controllers__filter .controllers__filter__button:nth-child(2) {
     margin: 0 1.6rem;
 }
 
-.controllers__filter .active {
-    color: hsl(220, 98%, 61%) !important;
+.todo-app.empty .controllers,
+.todo-app.empty .controllers__filter-mobile {
+    display: none;
 }
+
 
 .controllers__clear-completed__button {
     border: none;
     background-color: transparent;
+}
+
+.msg {
+    margin-top: 4.8rem;
+    font-size: 1.4rem;
+    text-align: center;
+    color: var(--light-text);
+}
+
+.msg-empty {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 1.8rem;
+    color: var(--light-text);
+}
+
+.todo-app.empty .msg {
+    display: none;
+}
+
+/* attribution */
+.attribution {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 4rem;
+    flex: 1;
+    font-size: 1.2rem;
+    color: var(--dark-text);
+}
+
+.attribution__link {
+    color: hsl(220, 98%, 61%);
 }
 
 [data-anime] {
@@ -267,18 +310,6 @@ body {
 [data-anime].animate {
     opacity: 1;
     transform: translate(0, 0);
-}
-
-
-/* attribution */
-.attribution {
-    padding: 20rem 0;
-    font-size: 1.4rem;
-    color: var(--dark-text);
-}
-
-.attribution__link {
-    color: hsl(220, 98%, 61%);
 }
 
 
@@ -312,13 +343,13 @@ body {
 
     /* new todo */
     .new-todo {
-        padding: 1.55rem 2rem;
         margin-top: 2.4rem;
+        padding: 1.55rem 2rem;
     }
 
     .new-todo__input {
         font-size: 1.4rem;
-        margin-left: 1.2rem;
+        margin-left: 1.6rem;
     }
 
 
@@ -334,45 +365,29 @@ body {
 
     .todo-list__todo__text {
         font-size: 1.4rem;
-        margin-left: 1.2rem;
+        margin-left: 1.6rem;
     }
 
     .todo-list__todo__delete {
         display: block;
-        width: 1.2rem;
-        height: 1.2rem;
-        background-size: 1.2rem 1.2rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        background-size: 1.4rem 1.4rem;
     }
 
 
 
     /* controllers */
-    .controllers {
-        font-size: 1.4rem;
-    }
-
-    .controllers__items-left {
-        font-size: 1.4rem;
-    }
-
-    .controllers__clear-completed__button {
-        font-size: 1.4rem;
-    }
-
     .controllers__filter {
         display: none;
     }
 
-    .controllers__filter__button {
-        font-size: 1.5rem;
-    }
-
     .controllers__filter-mobile {
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         background-color: var(--todo-background-color);
         margin-top: 2.4rem;
-        padding: 1.5rem 0;
+        padding: 1.6rem;
         border-radius: 5px;
     }
 }
