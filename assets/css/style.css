@@ -62,7 +62,7 @@ body {
 
 .todo-app {
     width: 54rem;
-    margin-top: 8.8rem;
+    margin-top: 7.2rem;
 }
 
 
@@ -142,6 +142,7 @@ body {
     justify-content: space-between;
     padding: 2rem 2.4rem;
     border-bottom: 1px solid var(--border-color);
+    cursor: grab;
 }
 
 .is-hidden {

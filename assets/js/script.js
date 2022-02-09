@@ -22,7 +22,7 @@ function checkInput(e) {
         const task = input.value
         const todo = createTodo(task)
         renderTodo(todo)
-        saveTodo(todo)
+        reorderTodos()
         checkEmpty()
         updateTodosLeft()
         clearInputText()
@@ -99,9 +99,10 @@ function checkEmpty() {
         emptyMsg.innerText = 'There is no tasks 👀'
         todosContainer.appendChild(emptyMsg)
     } else {
+        const emptyMsg = todosContainer.querySelector('.msg-empty')
         todoAppContainer.classList.remove('empty')
-        if (todosContainer.querySelector('.msg-empty')) {
-            todosContainer.removeChild(todosContainer.querySelector('.msg-empty'))
+        if (emptyMsg) {
+            todosContainer.removeChild(emptyMsg)
         }
     }
 }
@@ -139,7 +140,7 @@ function markTodoAsCompleted(todo) {
 }
 
 function renderTodo(todo) {
-    todosContainer.appendChild(todo)
+    todosContainer.insertBefore(todo, todosContainer.childNodes[0])
 }
 
 function updateTodosLeft() {
@@ -148,7 +149,7 @@ function updateTodosLeft() {
     let todosLeft = 0
 
     todos.forEach( todo => {
-        if (todo.classList.contains('todo-list__todo') && !todo.classList.contains('completed')) {
+        if (!todo.classList.contains('completed')) {
             todosLeft++
         }
     })
@@ -247,15 +248,17 @@ function reorderTodos() {
     tasks.splice(0, tasks.length)
 
     todos.forEach( (todo, index) => {
-        todo.setAttribute('data-index', index)
-        saveTodo(todo)
+        if (todo.classList.contains('todo-list__todo')) {
+            todo.setAttribute('data-index', index)
+            saveTodo(todo)
+        }
     })
 }
 
 // init
 function init() {
     html.classList = localStorage.getItem('theme')
-    tasks.forEach( task => renderTodo(createTodo(task.task, task.state)))
+    tasks.forEach( task => todosContainer.appendChild(createTodo(task.task, task.state)))
     updateTodosLeft()
     reorderTodos()
     checkEmpty()
