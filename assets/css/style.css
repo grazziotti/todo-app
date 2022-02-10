@@ -360,6 +360,11 @@ body {
         margin-top: 1.6rem;
     }
 
+    .checkbox::before {
+        width: 2rem;
+        height: 2rem;
+    }
+
     .todo-list__todo {
         padding: 1.5rem 2rem;
     }
