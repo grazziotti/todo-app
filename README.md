@@ -4,9 +4,12 @@
 
 ## 📄 Descrição
 
-Este projeto é uma solução para o desafio ToDo App do site Frontend Mentor :D
+Este projeto é uma solução para o desafio [Todo app](https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW) do site [Frontend Mentor](https://www.frontendmentor.io/) :D
 
-Link da projeto: https://grazziotti.github.io/todo-app/
+## 🔗 Links
+
+- Solução: [aqui](https://www.frontendmentor.io/solutions/flexbox-bem-and-vanilla-js-ACqJ6cnJY)
+- Link do projeto: [aqui](https://grazziotti.github.io/todo-app/)
 
 ## 🛠 Tecnologias Utilizadas
 
@@ -47,4 +50,5 @@ Abra o arquivo index.html no seu navegador.
 
 <img style="border-radius: 50px" alt="Daniel Grazziotti" title="Daniel Grazziotti" src="https://avatars.githubusercontent.com/grazziotti" height="100" width="100" />
 
-[Daniel Grazziotti](https://github.com/grazziotti)
+- Github - [@grazziotti](https://github.com/grazziotti)
+- Frontend Mentor - [@grazziotti](https://www.frontendmentor.io/profile/grazziotti)
