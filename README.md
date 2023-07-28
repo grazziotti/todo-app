@@ -4,7 +4,7 @@
 
 ## 📄 Descrição
 
-Este projeto é uma solução para o desafio [Todo app](https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW) do site [Frontend Mentor](https://www.frontendmentor.io/) :D
+Este projeto é uma solução para o desafio [Todo app](https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW) do site [Frontend Mentor](https://www.frontendmentor.io/) :D. Os desafios do Frontend Mentor ajudam a melhorar suas habilidades de codificação ao construir projetos realistas.
 
 ## 🔗 Links
 
